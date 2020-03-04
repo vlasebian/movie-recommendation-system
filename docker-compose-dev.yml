@@ -1,0 +1,67 @@
+version: '3.7'
+                                                                                
+services:                                                                       
+    database:                                                                         
+        container_name: 'app-dev-database'
+        image: mongo:latest
+        environment:
+            MONGO_INITDB_DATABASE: db
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: pass
+        volumes:                                                                
+           - ./database/init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+           - ./database/storage/:/data/db
+        ports:
+            - '27017-27019:27017-27019'
+    
+    backend:
+        container_name: 'app-dev-backend'
+        image: node:latest
+        command: sh -c 'npm install && npm run dev-start'
+        environment:
+            NODE_ENV: development
+            PORT: 3000
+        ports:
+            - '3000:3000'
+        working_dir: /root/backend
+        volumes:
+            - ./backend/src:/root/backend:cached
+        depends_on:
+            - database
+    
+              #    frontend:
+              #        container_name: 'app-dev-frontend'
+              #        image: node:12
+              #        command: sh -c 'npm install && npx ng serve -o'
+              #        environment:
+              #            PORT: 4200
+              #        ports:
+              #            - '4200:4200'
+              #        working_dir: /root/frontend/
+              #        volumes:
+              #            - ./frontend/src:/root/frontend:cached
+              #        depends_on: 
+              #            - database
+              #            - backend
+              #    
+              #    admin:
+              #        container_name: 'app-dev-admin'
+              #        image: node:latest
+              #        command: sh -c 'npm install && npm start'
+              #        environment:
+              #            NODE_ENV: development
+              #            PORT: 3000
+              #        ports:
+              #            - '3000:3001'
+              #        working_dir: /root/admin
+              #        volumes:
+              #            - ./admin/src:/root/admin:cached
+              #        depends_on:
+              #            - database
+              #
+              #    grafana:
+              #        container_name: 'app-dev-grafana'
+              #        image: grafana/grafana:latest
+              #        ports:
+              #            - '3000:3002'
+

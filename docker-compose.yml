@@ -2,8 +2,8 @@ version: '3.7'
                                                                                 
 services:                                                                       
     database:                                                                         
+        container_name: 'app-database'
         image: mongo:latest
-        container_name: 'database'
         environment:
             MONGO_INITDB_DATABASE: db
             MONGO_INITDB_ROOT_USERNAME: root
@@ -15,32 +15,34 @@ services:
             - '27017-27019:27017-27019'
     
     backend:
-        image: node:latest
-        container_name: 'backend'
-        command: sh -c 'npm install && npm start'
-        environment:
-            NODE_ENV: development
-            PORT: 3000
+        container_name: 'app-backend'
+        build: ./backend
         ports:
             - '3000:3000'
-        working_dir: /root/backend
-        volumes:
-            - ./backend:/root/backend:cached
         depends_on:
-            - database
+            - admin
     
     frontend:
-        image: node:12
-        container_name: 'frontend'
-        command: sh -c 'npm install && npx ng serve -o'
-        environment:
-            PORT: 4200
+        container_name: 'app-frontend'
+        build: ./frontend
         ports:
             - '4200:4200'
-        working_dir: /root/frontend
-        volumes:
-            - ./frontend:/root/frontend:cached
+        depends_on: 
+            - backend
+    
+    admin:
+        container_name: 'app-admin'
+        build: ./admin
+        ports:
+            - '3000:3001'
         depends_on: 
             - database
-            - backend
+
+    grafana:
+        container_name: 'app-grafana'
+        image: grafana/grafana:latest
+        ports:
+            - '3000:3002'
+        depends_on: 
+            - database
 
