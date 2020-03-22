@@ -32,12 +32,6 @@
                 <input type="file" (change)="onFileSelected($event)" />
             </mat-card-content>
 
-            <mat-card-content>
-                <h6>Give it some stars!</h6>
-                <ngb-rating [(rate)]="currentRate">
-                </ngb-rating>
-            </mat-card-content>
-
             <button mat-raised-button class="add-button" color="primary" [disabled]="!movieForm.valid || !selectedFile"> 
                 Add movie!
             </button>

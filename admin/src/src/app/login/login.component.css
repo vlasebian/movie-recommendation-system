@@ -1,0 +1,18 @@
+.header {
+    padding-block: 5%;
+}
+
+.login-container>* {
+    width: 40%;
+    margin: auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-button {
+    width: 20%;
+    margin: 5% auto;
+}

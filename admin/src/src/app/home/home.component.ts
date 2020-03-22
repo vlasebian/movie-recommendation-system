@@ -18,6 +18,11 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    var currentUser = localStorage.getItem('username');
+
+    if (currentUser == "admin") {
+      this.userIsAdmin = true;
+    }
   }
 
   onLogout() {

@@ -2,7 +2,6 @@ import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
 import { BackendService } from '../../backend.service';
-import { IMovie } from '../../models/movie';
 
 @Component({
   selector: 'add-component',
@@ -61,7 +60,6 @@ export class AddComponent implements OnInit {
     fd.append('stars', String(this.currentRate));
     fd.append('description', movieForm.description);
     fd.append('category', movieForm.category);
-    fd.append('rating', String(this.currentRate));
     console.log(fd);
 
     this.backendService.addMovie(fd).subscribe(ret => {

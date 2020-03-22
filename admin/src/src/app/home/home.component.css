@@ -1,0 +1,24 @@
+.home-container>* {
+    width: 70%;
+    margin: 1% auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    width: 70%;
+    margin: 1% auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.navigation {
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+mat-list-item {
+    text-align: center;
+    white-space: nowrap;
+}

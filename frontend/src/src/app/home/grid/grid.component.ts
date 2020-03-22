@@ -20,7 +20,6 @@ var blobToBase64 = function (blob, callback) {
 export class GridComponent implements OnInit {
   recommendations = [];
   ratingDisable = false;
-  userIsNotAdmin: boolean = false;
 
   uid: string = localStorage.getItem('uid');
   username: string = localStorage.getItem('username');
@@ -35,14 +34,6 @@ export class GridComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    /* check user */
-
-    if (this.username == "admin") {
-      this.userIsNotAdmin = false;
-    } else {
-      this.userIsNotAdmin = true;
-    }
-
     this.recommendations = [];
 
     /* get recommendations */
