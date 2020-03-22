@@ -1,9 +1,11 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-const preferenceSchema = new mongoose.Schema({
-    movieId: Number,
+const voteSchema = new mongoose.Schema({
     userId: Number,
     stars: Number,
 });
 
-module.exports = mongoose.model('Vote', preferenceSchema);
+module.exports = {
+    VoteSchema: voteSchema,
+    Vote: mongoose.model('Vote', voteSchema),
+}

@@ -1,63 +1,53 @@
 var express = require('express');
 var router = express.Router();
 
-module.exports = function(db) {
+const Movie = require('../models/movie');
+const Vote = require('../models/vote').Vote;
 
-    router.post('/change', (req, res, next) => {
-        var reqBody = req.body;
-        var movieId = reqBody.id;
-
-        let userId = req.user.dataValues.id;
-        let newRating = 0.00;
-
-        // delete vote
-        db.vote.destroy({
-            where: {
-                userId: userId,
-                movieId: movieId,
-            }
-        }).then(ret => {
-            // add new vote
-            return db.vote.create({
-                userId: userId,
-                movieId: movieId,
-                stars: reqBody.stars,
-            })
-        }).then(ret => {
-
-            // change movie total rating
-            return db.vote.findAll({
-                where: {
-                    movieId: movieId,
-                }
-            });
-
-        }).then(ret => {
-            ret.forEach(element => {
-                newRating += element.dataValues.stars;
-            });
-
-            newRating = newRating / ret.length;
-
-            // update movie
-            db.movie.findOne({
-                where: {
-                    id: movieId,
-                }
-            }).then(ret => {
-                if (ret) {
-                    ret.update({
-                        rating: newRating,
-                    })
-
-                    res.json({ success: true, newRating: ret.rating });
-                } else {
-                    res.json({ success: false });
-                }
-            });
-        });
-
+function updateTotalRating(movie) {
+    let sumStars = 0;
+    movie.votes.forEach(vote => {
+        sumStars += vote.stars;
     });
 
-    return router;
+    movie.rating = sumStars / movie.votes.length;
 }
+
+router.post('/change', async (req, res, next) => {
+    let userId = 69;
+    let movieId = req.body.movieId;
+    let newVote = req.body.newVote;
+
+    let movie = await Movie.findOne(
+        {
+            _id: movieId,
+            votes: {
+                $elemMatch: {
+                    userId: userId,
+                }
+            }
+        });
+
+    console.log(movie);
+
+    if (movie == null) {
+        /* add new vote */
+        movie = await Movie.findById(movieId);
+        movie.votes.push(new Vote({
+            userId: userId,
+            stars: newVote,
+        }));
+    } else {
+        /* update existing vote */
+        movie.votes[0].stars = newVote;
+        movie.votes[0].save();
+    }
+
+    updateTotalRating(movie);
+    console.log(movie);
+
+    movie.save();
+    res.status(200).json({ success: true });
+});
+
+module.exports = router;

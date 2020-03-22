@@ -3,7 +3,8 @@ const dotenv = require('dotenv');
 /**
  * Environment variables.
  * 
- * Most of them are loaded form .env file from the root directory.
+ * Most of them are loaded form .env file found in the 
+ * root directory.
  * 
  */
 

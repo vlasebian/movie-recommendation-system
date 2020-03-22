@@ -1,101 +1,71 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
+
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
-SECRET = 'so,secret';
+const User = require('../models/user');
 
+/* Register user */
+router.post('/register', async (req, res, next) => {
+    let preferences = [
+        req.body.categoryOne,
+        req.body.categoryTwo,
+        req.body.categoryThree,
+    ];
 
-module.exports = function(db) {
+    let newUser = new User({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        firstname: req.body.firstName,
+        lastname: req.body.lastName,
+        preferences: preferences,
+    });
 
-    /* Register user */
-    router.post('/register', (req, res, next) => {
-        var reqBody = req.body;
+    await newUser.save(function (err) {
+        if (err) {
+            next(err);
+        }
 
-        db.user.create({
-            username: reqBody.userName,
-            email: reqBody.email,
-            password: reqBody.password,
-            firstName: reqBody.firstName,
-            lastName: reqBody.lastName,
-        }).catch(err => {
-            throw new Error('orm: user creation failed.', err);
-        }).then(ret => {
-            var registerStatus = 0;
+        res.status(200).json({ sucess: true });
+    });
+});
 
-            if (ret == null) {
-                registerStatus = -1;
+/* Check user login */
+router.post('/login', async (req, res, next) => {
 
-                res.json({
-                    'registerStatus': registerStatus
-                })
-            } else {
-                // add favorite categories
+    await User.findOne(
+        {
+            username: req.body.username,
+            password: req.body.password,
 
-                db.liking.create({
-                    userId: ret.id,
-                    categoryOne: reqBody.categoryOne,
-                    categoryTwo: reqBody.categoryTwo,
-                    categoryThree: reqBody.categoryThree,
-                }).catch(err => {
-                    throw new Error('orm: adding likings failed.', err);
-                }).then(ret => {
-                    res.json({
-                        'registerStatus': registerStatus
-                    })
-                })
+        }, function (err, user) {
+            if (err) {
+                next(err);
             }
 
+            if (!user) {
+                res.status(403);
+                res.json({ success: false });
+            }
+
+            res.status(200).json({
+                'uid': user._id,
+                'username': user.username,
+                'email': user.email,
+                'firstname': user.firstName,
+                'lastname': user.lastName,
+                'categoryOne': user.preferences[0],
+                'categoryTwo': user.preferences[1],
+                'categoryThree': user.preferences[2],
+            });
         });
-    });
+});
 
-    /* Check user login */
-    router.post('/login', (req, res, next) => {
-        passport.authenticate('local', { session: false }, (err, user, info) => {
-            if (err | !user) {
-                return res.status(400).json({
-                    message: 'Something is not right',
-                    user: user
-                });
-            }
+/* User logout */
+router.post('/logout', async (req, res, next) => {
+    res.status(200).json({ success: true });
+});
 
-            req.login(user.id, { session: false }, err => {
-                if (err) {
-                    res.send(err);
-                }
-            });
-
-            // get favourite genres
-            db.liking.findOne({
-                where: {
-                    id: user.id,
-                }
-            }).catch(err => {
-                throw new Error('finding at login likings failed', err);
-            }).then(ret => {
-
-                // generate jwt
-                const token = jwt.sign(user.id, SECRET);
-                return res.json({
-                    'userName': user.userName,
-                    'email': user.email,
-                    'password': user.password,
-                    'firstName': user.firstName,
-                    'lastName': user.lastName,
-                    'categoryOne': ret.dataValues.categoryOne,
-                    'categoryTwo': ret.dataValues.categoryTwo,
-                    'categoryThree': ret.dataValues.categoryThree,
-                    'token': token,
-                });
-            });
-        })(req, res);
-    });
-
-    /* User logout */
-    router.post('/logout', (req, res, next) => {
-        req.logout();
-        res.json({ success: true });
-    });
-
-    return router;
-}
+module.exports = router;
