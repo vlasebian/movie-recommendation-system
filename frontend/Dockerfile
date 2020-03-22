@@ -5,7 +5,7 @@ RUN mkdir /root/app-frontend
 WORKDIR	/root/app-frontend
 
 # install app dependencies
-COPY ./src/package.json ./src/package-lock.json /root/app-frontend/
+COPY ./src/package.json /root/app-frontend/
 RUN npm install
 
 # copy app files
