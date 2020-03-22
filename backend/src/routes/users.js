@@ -28,39 +28,32 @@ router.post('/register', async (req, res, next) => {
             next(err);
         }
 
-        res.status(200).json({ sucess: true });
+        res.status(200).json({ success: true });
     });
 });
 
 /* Check user login */
 router.post('/login', async (req, res, next) => {
-
-    await User.findOne(
-        {
+    let user = await User.findOne({
             username: req.body.username,
             password: req.body.password,
-
-        }, function (err, user) {
-            if (err) {
-                next(err);
-            }
-
-            if (!user) {
-                res.status(403);
-                res.json({ success: false });
-            }
-
-            res.status(200).json({
-                'uid': user._id,
-                'username': user.username,
-                'email': user.email,
-                'firstname': user.firstName,
-                'lastname': user.lastName,
-                'categoryOne': user.preferences[0],
-                'categoryTwo': user.preferences[1],
-                'categoryThree': user.preferences[2],
-            });
         });
+
+    if (!user) {
+        res.status(403);
+        res.json({ success: false });
+    } else {
+        res.status(200).json({
+            'uid': user._id,
+            'username': user.username,
+            'email': user.email,
+            'firstname': user.firstName,
+            'lastname': user.lastName,
+            'categoryOne': user.preferences[0],
+            'categoryTwo': user.preferences[1],
+            'categoryThree': user.preferences[2],
+        });
+    }
 });
 
 /* User logout */

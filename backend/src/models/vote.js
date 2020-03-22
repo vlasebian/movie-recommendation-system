@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const voteSchema = new mongoose.Schema({
-    userId: Number,
+    uid: String,
     stars: Number,
 });
 

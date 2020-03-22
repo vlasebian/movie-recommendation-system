@@ -11,43 +11,41 @@ function updateTotalRating(movie) {
     });
 
     movie.rating = sumStars / movie.votes.length;
+
+    return movie.rating;
 }
 
 router.post('/change', async (req, res, next) => {
-    let userId = 69;
-    let movieId = req.body.movieId;
-    let newVote = req.body.newVote;
+    let uid = req.body.uid;
+    let movieId = req.body.movie.id;
+    let newVote = req.body.movie.stars;
 
     let movie = await Movie.findOne(
         {
             _id: movieId,
             votes: {
                 $elemMatch: {
-                    userId: userId,
+                    uid: uid,
                 }
             }
         });
-
-    console.log(movie);
 
     if (movie == null) {
         /* add new vote */
         movie = await Movie.findById(movieId);
         movie.votes.push(new Vote({
-            userId: userId,
+            uid: uid,
             stars: newVote,
         }));
     } else {
         /* update existing vote */
         movie.votes[0].stars = newVote;
-        movie.votes[0].save();
     }
 
-    updateTotalRating(movie);
-    console.log(movie);
+    let newRating = updateTotalRating(movie);
 
     movie.save();
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, data: { rating: newRating } });
 });
 
 module.exports = router;

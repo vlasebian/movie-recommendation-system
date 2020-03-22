@@ -1,0 +1,55 @@
+<div class="search-container">
+    <h2>
+        What do you want to find?
+    </h2>
+
+    <mat-form-field appearance="standard">
+        <input matInput #searchTerm placeholder="Enter search term here...">
+        <button mat-icon-button matSuffix (click)="onSubmit(searchTerm.value)">
+            <mat-icon>{{'search'}}</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <mat-card class="grid-card" *ngFor="let recommendation of recommendations">
+        <mat-card-content class="grid-card-content">
+            <img [src]=getSanitizeUrl(recommendation.image)>
+            <div>
+                <mat-card-title>
+                    {{recommendation.title}}
+                </mat-card-title>
+                <ngb-rating [readonly]=ratingDisable [(rate)]="recommendation.stars" (rateChange)="changeVote($event, recommendation)">
+                </ngb-rating>
+                <p>Genre: {{recommendation.category}} <br> Total rating: {{recommendation.rating}}</p>
+                <p> {{recommendation.description}} </p>
+            </div>
+        </mat-card-content>
+
+    </mat-card>
+
+
+    <!-- <mat-grid-list cols="3">
+        <mat-grid-tile *ngFor="let recommendation of recommendations">
+            <mat-card>
+
+                <mat-card-title>
+                    {{recommendation.title}}
+                </mat-card-title>
+
+                <img mat-card-lg-image [src]="getSanitizeUrl(recommendation.image)">
+
+                <mat-card-content>
+                    <ngb-rating [(rate)]="recommendation.stars" (rateChange)="changeVote($event, recommendation)">
+                    </ngb-rating>
+                </mat-card-content>
+
+                <mat-card-content>
+                    <p style="text-align: center">Genre: {{recommendation.category}} <br> Total rating: {{recommendation.rating}}</p>
+                    <p> {{recommendation.description}} </p>
+                </mat-card-content>
+
+            </mat-card>
+
+        </mat-grid-tile>
+    </mat-grid-list> -->
+
+</div>

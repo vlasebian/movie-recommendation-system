@@ -1,0 +1,16 @@
+.add-container>* {
+    width: 40%;
+    margin: 3% auto;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-button {
+    width: 20%;
+    margin: 5% auto;
+}

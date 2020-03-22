@@ -1,0 +1,92 @@
+<div class="register-container">
+
+    <div class="header">
+        <h1>
+            Movify.
+        </h1>
+    </div>
+
+    <mat-card>
+
+        <mat-card-title>
+            Register
+        </mat-card-title>
+
+        <form [formGroup]="registerForm" autocomplete="off" novalidate (ngSubmit)="onSubmit(registerForm.value)">
+
+            <mat-form-field>
+                <input matInput placeholder="Username" type="text" formControlName="username">
+                <mat-error *ngIf="hasError('username', 'required')">
+                    Username is required.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="Email" type="email" formControlName="email">
+                <mat-error *ngIf="hasError('email', 'required')">
+                    Email is required.
+                </mat-error>
+                <mat-error *ngIf="hasError('email', 'email')">
+                    Invalid email.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field type=hide>
+                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" formControlName="password">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="hasError('password', 'required')">
+                    Password is required.
+                </mat-error>
+                <mat-error *ngIf="hasError('password', 'minLength')">
+                    Password must have at least 5 characters!
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="First name" type="text" formControlName="firstname">
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput placeholder="Last name" type="text" formControlName="lastname">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>First favorite genre</mat-label>
+                <mat-select formControlName="categoryOne">
+                    <mat-option *ngFor="let categoryOne of categories" [value]="categoryOne">
+                        {{categoryOne}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Second favorite genre</mat-label>
+                <mat-select formControlName="categoryTwo">
+                    <mat-option *ngFor="let category_2 of categories" [value]="category_2">
+                        {{category_2}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Third favorite genre</mat-label>
+                <mat-select formControlName="categoryThree">
+                    <mat-option *ngFor="let category_3 of categories" [value]="category_3">
+                        {{category_3}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button class="register-button" color="primary" [disabled]="!registerForm.valid">
+                Sign up!
+            </button>
+
+        </form>
+
+        <mat-nav-list class="navigation">
+            <mat-list-item routerLink="/login">Already registered? Sign in here.</mat-list-item>
+        </mat-nav-list>
+    </mat-card>
+</div>

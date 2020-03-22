@@ -1,0 +1,21 @@
+<div class="grid-container">
+    <h4 *ngIf="userIsNotAdmin">
+        Hi, {{firstname}}! These are your recommendations based on your favorite genres, {{categoryOne}}, {{categoryTwo}} and {{categoryThree}}:
+    </h4>
+
+    <mat-card class="grid-card" *ngFor="let recommendation of recommendations">
+        <mat-card-content class="grid-card-content">
+            <img [src]=getSanitizeUrl(recommendation.image)>
+            <div>
+                <mat-card-title>
+                    {{recommendation.title}}
+                </mat-card-title>
+                <ngb-rating [readonly]=ratingDisable [(rate)]="recommendation.stars" (rateChange)="changeVote($event, recommendation)">
+                </ngb-rating>
+                <p>Genre: {{recommendation.category}} <br> Total rating: {{recommendation.rating}}</p>
+                <p> {{recommendation.description}} </p>
+            </div>
+        </mat-card-content>
+
+    </mat-card>
+</div>

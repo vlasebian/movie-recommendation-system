@@ -4,8 +4,6 @@ const VoteSchema = require('./vote').VoteSchema;
 const movieSchema = new mongoose.Schema({
     title: { 
         type: String, 
-        /* index needed for searching by title */
-        index: true, 
     },
     description: {
         type: String,
@@ -14,7 +12,9 @@ const movieSchema = new mongoose.Schema({
     category: String,
     votes: [VoteSchema],
     rating: Number,
-    imagePath: String,
+    image: String,
 });
+
+movieSchema.index({ "title": "text" });
 
 module.exports = mongoose.model('Movie', movieSchema);

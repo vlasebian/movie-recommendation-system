@@ -10,18 +10,17 @@ const Vote = require('../models/vote').Vote;
 
 /* GET movies by search term, order by rating */
 router.get('/search', async (req, res, next) => {
-    var searchTerm = req.query.term;
+    var uid = req.query.uid;
+    var term = req.query.term;
 
     /* get user preferences */
-    let result = await User.findById(userId, { preferences: 1 });
+    let result = await User.findById(uid);
     let preferences = result.preferences;
 
     /* get movies */
     let movies = await Movie.aggregate([
         {
-            $text: {
-                $search: searchTerm,
-            }
+            $match: { $text: { $search: term } },
         },
         { 
             $project: {
@@ -37,7 +36,7 @@ router.get('/search', async (req, res, next) => {
                             '$filter': {
                                 'input': '$votes',
                                 'as': 'vote',
-                                'cond': { $eq: [ '$$vote.userId', userId ] }
+                                'cond': { $eq: [ '$$vote.uid', uid ] }
                             },
                         },
                         'as': 'vote',
@@ -46,7 +45,7 @@ router.get('/search', async (req, res, next) => {
                         },
                     },
                 },
-                'imagePath': true,
+                'image': true,
                 'priority': {
                     $switch: {
                         branches: [
@@ -75,10 +74,10 @@ router.get('/search', async (req, res, next) => {
 
 /* GET top 6 rated movies */
 router.get('/recommendations', async (req, res, next) => {
-    let userId = "5e7664b0733348581409e9fb";
+    let uid = req.query.uid;
 
     /* get user preferences */
-    let result = await User.findById(userId, { preferences: 1 });
+    let result = await User.findById(uid, { preferences: 1 });
     let preferences = result.preferences;
 
     /* get movies */
@@ -97,7 +96,7 @@ router.get('/recommendations', async (req, res, next) => {
                             '$filter': {
                                 'input': '$votes',
                                 'as': 'vote',
-                                'cond': { $eq: [ '$$vote.userId', userId ] }
+                                'cond': { $eq: [ '$$vote.uid', uid ] }
                             },
                         },
                         'as': 'vote',
@@ -106,7 +105,7 @@ router.get('/recommendations', async (req, res, next) => {
                         },
                     },
                 },
-                'imagePath': true,
+                'image': true,
                 'priority': {
                     $switch: {
                         branches: [
@@ -134,17 +133,13 @@ router.get('/recommendations', async (req, res, next) => {
 });
 
 router.post('/add', upload.single('image'), async (req, res, next) => {
-    let newVote = new Vote({
-        userId: 69,
-        stars: Number(req.body.stars),
-    });
-
     let newMovie = new Movie({
         title: req.body.title,
         description: req.body.description,
         category: req.body.category,
-        votes: [ newVote ],
-        rating: Number(req.body.stars),
+        image: req.file.filename,
+        votes: [],
+        rating: 0,
     });
 
     await newMovie.save(function (err) {
@@ -159,15 +154,13 @@ router.post('/add', upload.single('image'), async (req, res, next) => {
 router.get('/image', (req, res, next) => {
     var image = null;
 
-    console.log(req.query.image);
-
     if (!req.query.image) image = 'movie-placeholder.png';
     else image = req.query.image;
 
     var imgPath = 'public/uploads/' + image;
 
     res.status(200).download(imgPath, err => {
-        if (err) console.log(err);
+        if (err) next(err);
     });
 });
 

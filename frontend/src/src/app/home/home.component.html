@@ -1,0 +1,25 @@
+<div class="header">
+
+    <div class="title">
+        <h1>
+            Movify.
+        </h1>
+        The recommendation engine for movies
+    </div>
+
+    <mat-nav-list class="navigation">
+        <mat-list-item routerLink="/home/grid">Recommendations</mat-list-item>
+        <mat-list-item routerLink="/home/search">Search for movies</mat-list-item>
+        <mat-list-item *ngIf="userIsAdmin" routerLink="/home/add">Add a movie</mat-list-item>
+    </mat-nav-list>
+    <mat-action-list>
+        <button mat-list-item (click)="onLogout()">Logout</button>
+    </mat-action-list>
+
+
+</div>
+
+<div class="home-container">
+
+    <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,46 @@
+<div class="add-container">
+    <mat-card>
+
+        <mat-card-title>
+            Add a movie to Movify
+        </mat-card-title>
+
+        <form [formGroup]="movieForm" autocomplete="off" novalidate (ngSubmit)="onSubmit(movieForm.value)">
+
+            <mat-form-field>
+                <input matInput type="text" placeholder="Movie title" formControlName="title">
+                <mat-error *ngIf="hasError('title', 'required')">
+                    Title is required.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput type="text" placeholder="Description" formControlName="description">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Movie genre</mat-label>
+                <mat-select formControlName="category">
+                    <mat-option *ngFor="let category of categories" [value]="category">
+                        {{category}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-card-content>
+                <h6>How about a poster for the movie?</h6>
+                <input type="file" (change)="onFileSelected($event)" />
+            </mat-card-content>
+
+            <mat-card-content>
+                <h6>Give it some stars!</h6>
+                <ngb-rating [(rate)]="currentRate">
+                </ngb-rating>
+            </mat-card-content>
+
+            <button mat-raised-button class="add-button" color="primary" [disabled]="!movieForm.valid || !selectedFile"> 
+                Add movie!
+            </button>
+        </form>
+    </mat-card>
+</div>
