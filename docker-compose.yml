@@ -6,25 +6,26 @@ services:
         image: mongo:latest
         environment:
             MONGO_INITDB_DATABASE: db
-            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_USERNAME: user
             MONGO_INITDB_ROOT_PASSWORD: pass
         volumes:                                                                
-           - ./database/init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
            - ./database/storage/:/data/db
-        ports:
-            - '27017-27019:27017-27019'
+        expose:
+           - 27017
     
     backend:
         container_name: 'app-backend'
         build: ./backend
+        command: npm run dev-start
         ports:
             - '3000:3000'
         depends_on:
-            - admin
+            - database
     
     frontend:
         container_name: 'app-frontend'
         build: ./frontend
+        command: npx ng serve -o --host 0.0.0.0
         ports:
             - '4200:4200'
         depends_on: 
@@ -33,16 +34,16 @@ services:
     admin:
         container_name: 'app-admin'
         build: ./admin
+        command: npx ng serve -o --host 0.0.0.0
         ports:
-            - '3000:3001'
+            - '4201:4200'
         depends_on: 
-            - database
+            - backend
 
     grafana:
         container_name: 'app-grafana'
         image: grafana/grafana:latest
         ports:
-            - '3000:3002'
+            - '3001:3000'
         depends_on: 
             - database
-
