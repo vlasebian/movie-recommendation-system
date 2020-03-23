@@ -9,6 +9,7 @@ ENV PATH /root/app-backend/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY ./src/package.json ./src/package-lock.json /root/app-backend/
+RUN npm install -g @angular/cli
 RUN npm install
 
 # copy app files

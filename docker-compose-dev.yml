@@ -6,13 +6,15 @@ services:
         image: mongo:latest
         environment:
             MONGO_INITDB_DATABASE: db
-            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_USERNAME: user
             MONGO_INITDB_ROOT_PASSWORD: pass
         volumes:                                                                
-           - ./database/init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+        #- ./database/init/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
            - ./database/storage/:/data/db
-        ports:
-            - '27017-27019:27017-27019'
+        expose:
+           - 27017
+        # ports:
+        #     - '27018:27017'
     
     backend:
         container_name: 'app-dev-backend'
@@ -29,39 +31,39 @@ services:
         depends_on:
             - database
     
-              #    frontend:
-              #        container_name: 'app-dev-frontend'
-              #        image: node:12
-              #        command: sh -c 'npm install && npx ng serve -o'
-              #        environment:
-              #            PORT: 4200
-              #        ports:
-              #            - '4200:4200'
-              #        working_dir: /root/frontend/
-              #        volumes:
-              #            - ./frontend/src:/root/frontend:cached
-              #        depends_on: 
-              #            - database
-              #            - backend
-              #    
-              #    admin:
-              #        container_name: 'app-dev-admin'
-              #        image: node:latest
-              #        command: sh -c 'npm install && npm start'
-              #        environment:
-              #            NODE_ENV: development
-              #            PORT: 3000
-              #        ports:
-              #            - '3000:3001'
-              #        working_dir: /root/admin
-              #        volumes:
-              #            - ./admin/src:/root/admin:cached
-              #        depends_on:
-              #            - database
-              #
-              #    grafana:
-              #        container_name: 'app-dev-grafana'
-              #        image: grafana/grafana:latest
-              #        ports:
-              #            - '3000:3002'
+    frontend:
+        container_name: 'app-dev-frontend'
+        image: node:latest
+        command: sh -c 'npm install && npx ng serve --host 0.0.0.0'
+        #environment:
+        #    PORT: 4200
+        ports:
+            - '4200:4200'
+        working_dir: /root/frontend/
+        volumes:
+            - ./frontend/src:/root/frontend:cached
+        depends_on: 
+            - database
+            - backend
+    
+    admin:
+        container_name: 'app-dev-admin'
+        image: node:latest
+        command: sh -c 'npm install && npx ng serve --host 0.0.0.0'
+        #environment:
+        #    NODE_ENV: development
+        #    PORT: 4200
+        ports:
+            - '4201:4200'
+        working_dir: /root/admin
+        volumes:
+            - ./admin/src:/root/admin:cached
+        depends_on:
+            - database
+
+    grafana:
+        container_name: 'app-dev-grafana'
+        image: grafana/grafana:latest
+        ports:
+            - '3001:3000'
 
