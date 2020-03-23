@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Movify';
+  title = 'Recommendr.';
   // currentUser: IUser;
 
   // constructor(
