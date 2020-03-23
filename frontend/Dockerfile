@@ -6,6 +6,7 @@ WORKDIR	/root/app-frontend
 
 # install app dependencies
 COPY ./src/package.json /root/app-frontend/
+RUN npm install -g @angular/cli
 RUN npm install
 
 # copy app files
@@ -15,4 +16,4 @@ COPY ./src/ /root/app-frontend
 EXPOSE 4200
 
 # start the frontend server
-RUN ng serve -o
+RUN npx ng serve -o --host 0.0.0.0

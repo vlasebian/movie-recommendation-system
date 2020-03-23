@@ -16,4 +16,4 @@ COPY ./src/ /root/app-admin
 EXPOSE 4200
 
 # start the frontend server
-RUN ng serve -o
+RUN npx ng serve -o --host 0.0.0.0
