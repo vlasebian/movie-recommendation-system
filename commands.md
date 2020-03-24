@@ -28,3 +28,6 @@ Deploy service stack (issue this command on the manager vm):
 
 See all the services in the stack:
 `docker stack ps <app-name>`
+
+See the logs of a service:
+`docker service logs -f <service-name>`
