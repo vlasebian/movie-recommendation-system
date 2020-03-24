@@ -2,7 +2,6 @@ version: '3.7'
                                                                                 
 services:                                                                       
     database:                                                                         
-        container_name: 'app-dev-database'
         image: mongo:latest
         environment:
             MONGO_INITDB_DATABASE: db
@@ -14,7 +13,6 @@ services:
            - 27017
     
     backend:
-        container_name: 'app-dev-backend'
         image: node:latest
         command: sh -c 'npm install && npm run dev-start'
         environment:
@@ -29,7 +27,6 @@ services:
             - database
     
     frontend:
-        container_name: 'app-dev-frontend'
         image: node:latest
         command: sh -c 'npm install && npx ng serve --host 0.0.0.0'
         #environment:
@@ -44,7 +41,6 @@ services:
             - backend
     
     admin:
-        container_name: 'app-dev-admin'
         image: node:latest
         command: sh -c 'npm install && npx ng serve --host 0.0.0.0'
         #environment:
@@ -59,7 +55,6 @@ services:
             - database
 
     grafana:
-        container_name: 'app-dev-grafana'
         image: grafana/grafana:latest
         ports:
             - '3001:3000'

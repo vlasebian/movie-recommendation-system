@@ -1,0 +1,69 @@
+version: '3.7'
+# what endpoints do I use for database and backend access??                                                                                
+services:                                                                       
+    database:                                                   
+        image: mongo:latest
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+                #volumes:
+                #   - database:/data/db
+        environment:
+            MONGO_INITDB_DATABASE: db
+            MONGO_INITDB_ROOT_USERNAME: user
+            MONGO_INITDB_ROOT_PASSWORD: pass
+        deploy:
+            placement: 
+                constraints: [node.role == manager]
+        expose:
+           - 27017
+    
+    backend:
+        image: vlasebian/idp-backend:latest
+        command: npm run dev-start
+        ports:
+            - '3000:3000'
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+        depends_on:
+            - database
+    
+    frontend:
+        image: vlasebian/idp-frontend:latest
+        command: npx ng serve -o --host 0.0.0.0
+        ports:
+            - '4200:4200'
+        deploy:
+            replicas: 2
+            restart_policy:
+                condition: on-failure
+        depends_on: 
+            - backend
+    
+    admin:
+        image: vlasebian/idp-admin:latest
+        command: npx ng serve -o --host 0.0.0.0
+        ports:
+            - '4201:4200'
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+        depends_on: 
+            - backend
+
+    visualizer:
+        image: dockersamples/visualizer:stable
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock'
+        ports:
+            - '8080:8080'
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+            placement: 
+                constraints: [node.role == manager]
