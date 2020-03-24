@@ -31,3 +31,5 @@ See all the services in the stack:
 
 See the logs of a service:
 `docker service logs -f <service-name>`
+
+sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
