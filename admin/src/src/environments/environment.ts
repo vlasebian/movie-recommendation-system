@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  endpoint: 'http://rec_backend:3000/api/',
+  endpoint: 'http://backend_endpoint:3000/api/',
 };
 
 /*
