@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-MONGODB_URI = 'mongodb://database_endpoint:27017/recommendr'
+MONGODB_URI = 'mongodb://root:pass@database:27017/recommendr'
 
 async function initDatabaseConn() {
     try {

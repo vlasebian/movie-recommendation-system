@@ -1,5 +1,5 @@
 version: '3.7'
-# what endpoints do I use for database and backend access??                                                                                
+
 services:                                                                       
     database:                                                   
         image: mongo:latest
@@ -8,11 +8,9 @@ services:
             restart_policy:
                 condition: on-failure
         environment:
-            MONGO_INITDB_DATABASE: db
-            MONGO_INITDB_ROOT_USERNAME: user
+            MONGO_INITDB_DATABASE: recommendr
+            MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: pass
-        external_links:
-            - database_endpoint
         deploy:
             placement: 
                 constraints: [node.role == manager]
@@ -22,8 +20,6 @@ services:
         command: npm run dev-start
         ports:
             - '3000:3000'
-        external_links:
-            - backend_endpoint
         deploy:
             replicas: 1
             restart_policy:
