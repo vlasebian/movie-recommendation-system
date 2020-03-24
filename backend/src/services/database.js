@@ -1,12 +1,13 @@
-const config = require('../config');
 const mongoose = require('mongoose');
+
+MONGODB_URI = 'mongodb://database:27017/recommendr'
 
 async function initDatabaseConn() {
     try {
         mongoose.set('bufferCommands', false); // debugging only
         mongoose.set('useCreateIndex', true);
 
-        await mongoose.connect(config.databaseURI, 
+        await mongoose.connect(MONGODB_URI, 
             { 
                 useNewUrlParser: true,
                 useUnifiedTopology: true,

@@ -15,6 +15,8 @@ const methodOverride = require('method-override');
 const initDatabaseConn = require('./services/database');
 initDatabaseConn();
 
+SECRET='secret-random-string'
+
 // enable cors
 app.use(cors());
 app.options('*', cors()) // include before other routes
@@ -31,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // express session middleware, must be before passport.session()!
 app.use(session({
-    secret: config.secret,
+    secret: SECRET,
     resave: false,
     saveUninitialized: false,
 }));
