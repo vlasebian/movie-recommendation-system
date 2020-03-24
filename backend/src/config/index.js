@@ -1,5 +1,3 @@
-const dotenv = require('dotenv');
-
 /**
  * Environment variables.
  * 
@@ -9,10 +7,6 @@ const dotenv = require('dotenv');
  */
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
-if (!dotenv.config()) {
-    throw new Error('Could not find .env file!');
-}
 
 module.exports = {
   /**

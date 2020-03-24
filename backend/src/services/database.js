@@ -1,3 +1,4 @@
+const config = require('../config');
 const mongoose = require('mongoose');
 
 async function initDatabaseConn() {
@@ -5,7 +6,7 @@ async function initDatabaseConn() {
         mongoose.set('bufferCommands', false); // debugging only
         mongoose.set('useCreateIndex', true);
 
-        await mongoose.connect(process.env.MONGODB_URI, 
+        await mongoose.connect(config.databaseURI, 
             { 
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
