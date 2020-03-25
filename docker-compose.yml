@@ -8,9 +8,11 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=pass
             - MONGO_INITDB_DATABASE=recommendr
         volumes:
-            - ./init-users.js:/docker-entrypoint-initdb.d/init-users.js:ro
+            - ./database/init/init-users.js:/docker-entrypoint-initdb.d/init-users.js:ro
         networks:
             - idpnet
+        expose:
+            - 27017
         deploy:
             replicas: 1
             restart_policy:
