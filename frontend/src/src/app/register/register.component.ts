@@ -75,6 +75,9 @@ export class RegisterComponent implements OnInit {
       } else {
         alert('Sign up failed! Check your info again!');
       }
+    }, error => {
+        console.log(error);
+        alert("Register failed!");
     });
 
     this.formGroupDirective.resetForm();

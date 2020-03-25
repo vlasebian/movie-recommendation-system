@@ -7,15 +7,13 @@ import { catchError, map } from 'rxjs/operators';
 import { IUser } from './models/user';
 import { ILogin } from './models/login';
 
-import { environment } from '../environments/environment';
-
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-  })
+  }),
 };
 
-const endpoint = environment.endpoint;
+const endpoint = 'http://localhost:4200/api/';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +24,7 @@ export class BackendService {
   ) { }
 
   private handleError() {
+    console.log("here");
     return (error: any) => {
       console.error(error);
       return throwError(error);

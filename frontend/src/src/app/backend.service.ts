@@ -17,8 +17,7 @@ const httpOptions = {
   })
 };
 
-// this must be changed accordingly. TODO: move it to a settings file.
-const endpoint = 'http://localhost:3000/api/';
+const endpoint = 'http://backend:3000/api/';
 
 @Injectable({
   providedIn: 'root'

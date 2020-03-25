@@ -1,7 +1,6 @@
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
-const config = require('./config');
 
 const app = express();
 const path = require('path');
@@ -11,15 +10,15 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
+// enable cors
+app.use(cors());
+
 // database initialization
 const initDatabaseConn = require('./services/database');
 initDatabaseConn();
 
 SECRET='secret-random-string'
 
-// enable cors
-app.use(cors());
-app.options('*', cors()) // include before other routes
 
 // routes
 const indexRouter = require('./routes/index');

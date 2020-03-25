@@ -4,20 +4,18 @@ services:
     database:                                                                         
         image: mongo:latest
         environment:
-            MONGO_INITDB_DATABASE: db
-            MONGO_INITDB_ROOT_USERNAME: user
+            MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: pass
+            MONGO_INITDB_DATABASE: recommendr
         volumes:                                                                
-           - ./database/storage/:/data/db
+        #- ./database/storage/:/data/db
+           - ./database/init/init-users.js:/docker-entrypoint-initdb.d/init-users.js:ro
         expose:
            - 27017
     
     backend:
         image: node:latest
         command: sh -c 'npm install && npm run dev-start'
-        environment:
-            NODE_ENV: development
-            PORT: 3000
         ports:
             - '3000:3000'
         working_dir: /root/backend
@@ -28,9 +26,7 @@ services:
     
     frontend:
         image: node:latest
-        command: sh -c 'npm install && npx ng serve --host 0.0.0.0'
-        #environment:
-        #    PORT: 4200
+        command: sh -c 'npm install && npx ng serve -o --proxy-config proxy.config.json --host 0.0.0.0'
         ports:
             - '4200:4200'
         working_dir: /root/frontend/
@@ -42,10 +38,7 @@ services:
     
     admin:
         image: node:latest
-        command: sh -c 'npm install && npx ng serve --host 0.0.0.0'
-        #environment:
-        #    NODE_ENV: development
-        #    PORT: 4200
+        command: sh -c 'npm install && npx ng serve -o --proxy-config proxy.config.json --host 0.0.0.0'
         ports:
             - '4201:4200'
         working_dir: /root/admin
@@ -53,9 +46,4 @@ services:
             - ./admin/src:/root/admin:cached
         depends_on:
             - database
-
-    grafana:
-        image: grafana/grafana:latest
-        ports:
-            - '3001:3000'
 

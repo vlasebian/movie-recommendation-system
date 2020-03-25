@@ -14,7 +14,7 @@ export class RegisterComponent implements OnInit {
   hide = true;
 
   registerForm: FormGroup;
-  @ViewChild(FormGroupDirective, {static: false}) formGroupDirective: FormGroupDirective;
+  @ViewChild(FormGroupDirective, { static: false }) formGroupDirective: FormGroupDirective;
 
   constructor(
     private backendService: BackendService,
@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(5)]),
       firstname: new FormControl('', [Validators.required]),
-      lastname: new FormControl('',[Validators.required]),
+      lastname: new FormControl('', [Validators.required]),
     });
   }
 
@@ -56,11 +56,14 @@ export class RegisterComponent implements OnInit {
 
     // send to backend and if correct, do redirection to login
     this.backendService.register(formContent).subscribe(data => {
-      if (data['success'])  {
+      if (data['success']) {
         this.router.navigate(['login']);
       } else {
         alert('Sign up failed! Check your info again!');
       }
+    }, error => {
+        console.log(error);
+        alert("Register failed!");
     });
 
     this.formGroupDirective.resetForm();

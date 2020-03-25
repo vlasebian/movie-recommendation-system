@@ -8,9 +8,11 @@ services:
             restart_policy:
                 condition: on-failure
         environment:
-            MONGO_INITDB_DATABASE: recommendr
-            MONGO_INITDB_ROOT_USERNAME: root
-            MONGO_INITDB_ROOT_PASSWORD: pass
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=pass
+            - MONGO_INITDB_DATABASE=recommendr
+        volumes:
+            - ./init-users.js:/docker-entrypoint-initdb.d/init-users.js:ro
         deploy:
             placement: 
                 constraints: [node.role == manager]
@@ -29,21 +31,19 @@ services:
     
     frontend:
         image: vlasebian/idp-frontend:latest
-        command: npx ng serve -o --host 0.0.0.0
+        command: npx ng serve -o --host 0.0.0.0 --proxy-config proxy.config.json
         ports:
             - '4200:4200'
         deploy:
             replicas: 2
             restart_policy:
                 condition: on-failure
-                #placement: 
-                #constraints: [node.role == manager]
         depends_on: 
             - backend
     
     admin:
         image: vlasebian/idp-admin:latest
-        command: npx ng serve -o --host 0.0.0.0
+        command: npx ng serve -o --host 0.0.0.0 --proxy-config proxy.config.json
         ports:
             - '4201:4200'
         deploy:

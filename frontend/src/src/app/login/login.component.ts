@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
       },
       error => {
         console.log(error);
-        alert("Login failed!")
+        alert("Login failed!");
       });
 
     this.formGroupDirective.resetForm();

@@ -10,7 +10,7 @@ Connect to docker machine (using ssh):
 `docker-machine ssh <vmname>`
 
 Copy files to a vm:
-`docker-machine scp <filename> <vmname>:.
+`docker-machine scp <filename> <vmname>:.`
 
 Create a swarm (issue this command on the vm that will be the manager):
 `docker swarm init --advertise-addr <ip>`
@@ -26,10 +26,14 @@ See all the nodes from the current swarm:
 Deploy service stack (issue this command on the manager vm):
 `docker stack deploy -c <docker-compose.yml> <app-name>`
 
-See all the services in the stack:
+See the status of the services in the stack:
 `docker stack ps <app-name>`
 
 See the logs of a service:
 `docker service logs -f <service-name>`
 
-sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
+Get info about the services in the stack:
+`docker stack services <stack-name>`
+
+Restart service with:
+`docker service update --force <id>`
