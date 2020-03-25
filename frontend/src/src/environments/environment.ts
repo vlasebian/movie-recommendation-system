@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  endpoint: 'http://backend:3000/api/',
 };
 
 /*

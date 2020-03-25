@@ -19,11 +19,8 @@ import { MatInputModule, MatDialogModule, MatRadioModule, MatButtonModule, MatLi
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { BackendService } from './backend.service';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-// import { HttpClient } from '@angular/common/http';
-
-// import { JwtInterceptor } from './_helpers/jwt.interceptor';
-// import { ErrorInterceptor } from './_helpers/error.interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -53,9 +50,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
   ],
   providers: [
     BackendService,
-    // HttpClient,
-    // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    HttpClient,
   ],
   bootstrap: [AppComponent]
 })
