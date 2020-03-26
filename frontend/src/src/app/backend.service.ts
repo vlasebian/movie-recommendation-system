@@ -9,7 +9,7 @@ import { IUser } from './models/user';
 import { ILogin } from './models/login';
 import { IAux } from './models/aux';
 
-// TODO: add Toastr
+import { environment } from '../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,7 +17,7 @@ const httpOptions = {
   })
 };
 
-const endpoint = 'http://localhost:4200/api/';
+const endpoint = environment.endpoint;
 
 @Injectable({
   providedIn: 'root'

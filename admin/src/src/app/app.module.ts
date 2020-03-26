@@ -19,7 +19,7 @@ import { MatInputModule, MatDialogModule, MatRadioModule, MatButtonModule, MatLi
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { BackendService } from './backend.service';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,6 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
   ],
   providers: [
     BackendService,
-    HttpClient,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
 import { BackendService } from '../../backend.service';
@@ -27,7 +26,6 @@ export class AddComponent implements OnInit {
 
   constructor(
     private backendService: BackendService,
-    private router: Router
   ) { }
 
   ngOnInit() {
@@ -64,7 +62,6 @@ export class AddComponent implements OnInit {
 
     this.backendService.addMovie(fd).subscribe(ret => {
       alert('Movie added succesfully!');
-      this.router.navigate(['home/grid/']);
     });
 
     this.formGroupDirective.resetForm();

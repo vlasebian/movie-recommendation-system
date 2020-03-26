@@ -37,3 +37,6 @@ Get info about the services in the stack:
 
 Restart service with:
 `docker service update --force <id>`
+
+Update the image of a service:
+`docker service update --image <dockerhub-account>/<repo>:<tag> <service-name>` 
