@@ -2,18 +2,11 @@ version: '3.7'
 
 services:                                                                       
     database:                                                   
-        image: mongo:latest
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=pass
-            - MONGO_INITDB_DATABASE=recommendr
+        image: vlasebian/idp-database:latest
         volumes:
             - dbdata:/data/db
-            - init-users.js:/docker-entrypoint-initdb.d/init-users.js:ro
         networks:
             - idpnet
-        expose:
-            - 27017
         deploy:
             replicas: 1
             restart_policy:
@@ -63,17 +56,20 @@ services:
         depends_on: 
             - backend
 
-    visualizer:
-        image: dockersamples/visualizer:stable
-        volumes:
-            - '/var/run/docker.sock:/var/run/docker.sock'
+    prometheus:
+        image: vlasebian/idp-metrics:latest
+        command: /bin/sh -c "/bin/prometheus"
         ports:
-            - '8080:8080'
-        deploy:
-            replicas: 1
-            restart_policy:
-                condition: on-failure
-            placement: 
-                constraints: [node.role == manager]
+            - '9090:9090'
+        networks:
+            - idpnet
+
+    node_exporter:
+        image: prom/node-exporter:latest
+        ports:
+            - '9100:9100'
+        networks:
+            - idpnet
+
 networks:
     idpnet:

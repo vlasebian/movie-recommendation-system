@@ -9,6 +9,7 @@ const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const promMid = require('express-prometheus-middleware');
 
 // enable cors
 app.use(cors());
@@ -29,6 +30,12 @@ const moviesRouter = require('./routes/movies');
 // body parser
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
+app.use(promMid({
+  metricsPath: '/metrics',
+  collectDefaultMetrics: true,
+  requestDurationBuckets: [0.1, 0.5, 1, 1.5],
+}));
 
 // express session middleware
 app.use(session({
