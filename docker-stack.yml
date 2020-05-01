@@ -4,7 +4,7 @@ services:
     database:                                                   
         image: vlasebian/idp-database:latest
         volumes:
-            - dbdata:/data/db
+            - ./dbdata:/data/db
         networks:
             - idpnet
         deploy:
@@ -57,8 +57,7 @@ services:
             - backend
 
     prometheus:
-        image: vlasebian/idp-metrics:latest
-        command: /bin/sh -c "/bin/prometheus"
+        image: vlasebian/idp-monitor:latest
         ports:
             - '9090:9090'
         networks:

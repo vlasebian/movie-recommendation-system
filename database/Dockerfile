@@ -7,3 +7,4 @@ ENV MONGO_INITDB_DATABASE=recommendr
 COPY init/init-users.js /docker-entrypoint-initdb.d/init-users.js
 
 EXPOSE 27017
+
