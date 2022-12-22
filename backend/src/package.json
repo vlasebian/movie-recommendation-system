@@ -19,7 +19,7 @@
     "faker": "^4.1.0",
     "faker-cli": "^1.4.1",
     "http-errors": "~1.6.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash.times": "^4.3.2",
     "method-override": "^3.0.0",
     "mongodb": "^3.5.5",
